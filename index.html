@@ -11,7 +11,8 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
     
     <!-- PWA Manifest Link (you'll need to create this file) -->
     <link rel="manifest" href="manifest.json">
@@ -21,85 +22,147 @@
         /* Custom styles for the app */
         body {
             font-family: 'Roboto', sans-serif;
-            /* Creates the grid background pattern */
+            transition: background-color 0.3s ease;
+        }
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        .font-bangers {
+            font-family: 'Bangers', cursive;
+        }
+        /* Style for the landing page background */
+        .landing-bg {
             background-color: #fafafa;
             background-image:
                 linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
             background-size: 20px 20px;
         }
-        .font-poppins {
-            font-family: 'Poppins', sans-serif;
+        /* Style for the form page background */
+        .form-bg {
+            background-color: #C6D2FF;
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 24px,
+                rgba(255, 255, 255, 0.2) 24px,
+                rgba(255, 255, 255, 0.2) 25px
+            );
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="landing-bg">
 
-    <div class="relative min-h-screen flex flex-col items-center justify-between p-20 overflow-hidden">
-        
-        <!-- Top decorative sun element -->
-        <div class="absolute top-0 right-0 -mt-12 -mr-16">
-            <svg width="200" height="200" viewBox="0 0 100 100" class="text-yellow-400">
-                <path fill="currentColor" d="M50 0 L61.8 38.2 L100 38.2 L69.1 61.8 L80.9 100 L50 76.4 L19.1 100 L30.9 61.8 L0 38.2 L38.2 38.2 Z" />
-            </svg>
-        </div>
-
-        <!-- Header Section -->
-        <header class="text-center w-full max-w-md z-10">
-            <!-- University Logo -->
-            <img src="UiTM-Logo.png" alt="Universiti Teknologi MARA Logo" class="mx-auto mb-4 h-16 object-contain">
+    <!-- ================================================== -->
+    <!-- ============== LANDING PAGE SECTION ============== -->
+    <!-- ================================================== -->
+    <section id="landingPage">
+        <div class="relative min-h-screen flex flex-col items-center justify-around p-20 overflow-hidden">
             
-            <!-- App Title - Oval Shape -->
-            <div class="inline-block bg-teal-500 text-black text-xl font-medium rounded-[50%/100%] px-10 py-4 shadow-md -rotate-2">
-                EMERGENCY MEDICINE FORMULARY
+            <div class="absolute top-0 right-0 -mt-12 -mr-16">
+                <svg width="200" height="200" viewBox="0 0 100 100" class="text-yellow-400">
+                    <path fill="currentColor" d="M50 0 L61.8 38.2 L100 38.2 L69.1 61.8 L80.9 100 L50 76.4 L19.1 100 L30.9 61.8 L0 38.2 L38.2 38.2 Z" />
+                </svg>
             </div>
-        </header>
 
-        <!-- Main Content: ED-Access Logo -->
-        <main class="flex-grow flex items-center justify-center z-10">
-            <div class="relative text-center">
-                <!-- Left Syringe Icon -->
-                <div class="absolute -left-16 -top-8 transform -rotate-180">
-                    <!-- The src attribute now points to a local file -->
-                    <img src="syringe-icon.png" alt="Syringe icon" class="h-20 w-20">
+            <header class="text-center w-full max-w-md z-10">
+                <img src="UiTM-Logo.png" alt="Universiti Teknologi MARA Logo" class="mx-auto mb-4 h-16 object-contain">
+                <div class="inline-block bg-teal-500 text-black text-xl font-medium rounded-[50%/100%] px-10 py-4 shadow-md -rotate-2">
+                    EMERGENCY MEDICINE FORMULARY
                 </div>
-                
-                <!-- Oval Shape Background -->
-                <div class="relative w-64 h-20 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
-                    <h1 class="text-white text-4xl font-poppins" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-                        ED-ACCESS
-                    </h1>
+            </header>
+
+            <main class="flex-grow flex items-center justify-center z-10">
+                <div class="relative text-center">
+                    <div class="absolute -left-16 -top-8 transform -rotate-45">
+                        <img src="syringe-icon.png" alt="Syringe icon" class="h-20 w-20">
+                    </div>
+                    <div class="relative w-64 h-20 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
+                        <h1 class="text-white text-5xl font-bangers tracking-wider" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                            ED-ACCESS
+                        </h1>
+                    </div>
+                    <div class="absolute -right-16 -bottom-8 transform rotate-45">
+                         <img src="syringe-icon.png" alt="Syringe icon" class="h-20 w-20">
+                    </div>
                 </div>
+            </main>
 
-                <!-- Right Syringe Icon -->
-                <div class="absolute -right-16 -bottom-8 transform rotate-0">
-                     <!-- The src attribute now points to a local file -->
-                     <img src="syringe-icon.png" alt="Syringe icon" class="h-20 w-20">
+            <footer class="w-full max-w-md text-center z-10">
+                <button id="startButton" class="bg-teal-500 text-white font-bold text-2xl rounded-full px-16 py-3 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-300">
+                    Start
+                </button>
+            </footer>
+        </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- ================= FORM PAGE SECTION =============== -->
+    <!-- ================================================== -->
+    <section id="formPage" class="hidden">
+        <div class="relative min-h-screen flex flex-col items-center justify-around p-6 overflow-hidden">
+
+            <div class="absolute top-1/4 left-8 text-yellow-400 text-2xl transform -rotate-12">~</div>
+            <div class="absolute bottom-1/4 right-8 text-yellow-400 text-2xl transform rotate-12">~</div>
+            <div class="absolute top-1/3 right-12 text-yellow-400 text-3xl">✦</div>
+            <div class="absolute bottom-1/3 left-12 text-yellow-400 text-3xl">✦</div>
+
+            <header class="text-center w-full max-w-sm z-10">
+                <div class="bg-white/80 rounded-lg shadow-md p-3 flex items-center justify-center space-x-4">
+                    <img src="heart-icon.png" alt="Heartbeat icon" class="h-8 w-8">
+                    <h1 class="text-2xl font-bold font-poppins text-gray-800 tracking-wider">PLEASE INSERT</h1>
+                    <img src="heart-icon.png" alt="Heartbeat icon" class="h-8 w-8">
                 </div>
-            </div>
-        </main>
+            </header>
 
-        <!-- Footer Section with Start Button -->
-        <footer class="w-full max-w-md text-center z-10">
-            <button class="bg-teal-500 text-white font-bold text-2xl rounded-full px-16 py-3 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-300">
-                Start
-            </button>
-        </footer>
+            <main class="w-full max-w-xs z-10">
+                <form class="space-y-6">
+                    <div class="flex items-center">
+                        <label for="age" class="w-1/3 text-lg font-bold text-gray-800">AGE:</label>
+                        <input type="number" id="age" name="age" class="w-2/3 p-2 rounded-lg border-2 border-gray-300 shadow-inner bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400">
+                    </div>
+                    <div class="flex items-center">
+                        <label for="gender" class="w-1/3 text-lg font-bold text-gray-800">GENDER:</label>
+                        <input type="text" id="gender" name="gender" class="w-2/3 p-2 rounded-lg border-2 border-gray-300 shadow-inner bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400">
+                    </div>
+                    <div class="flex items-center">
+                        <label for="weight" class="w-1/3 text-lg font-bold text-gray-800">WEIGHT:</label>
+                        <input type="number" id="weight" name="weight" class="w-2/3 p-2 rounded-lg border-2 border-gray-300 shadow-inner bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400" placeholder="kg">
+                    </div>
+                    <div class="flex items-center">
+                        <label for="height" class="w-1/3 text-lg font-bold text-gray-800">HEIGHT:</label>
+                        <input type="number" id="height" name="height" class="w-2/3 p-2 rounded-lg border-2 border-gray-300 shadow-inner bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400" placeholder="cm">
+                    </div>
+                </form>
+            </main>
 
-    </div>
-    
-    <!-- You would link your service worker script here -->
-    <!-- <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(registration => {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, err => {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
-        }
-    </script> -->
+            <footer class="w-full max-w-md text-center z-10">
+                <button class="bg-red-500 text-white font-bold text-2xl rounded-xl px-16 py-3 shadow-lg border-b-4 border-red-700 transform transition-transform duration-200 hover:scale-105 active:border-b-2 active:translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-red-300">
+                    START
+                </button>
+            </footer>
+        </div>
+    </section>
+
+    <!-- JavaScript to switch between pages -->
+    <script>
+        const landingPage = document.getElementById('landingPage');
+        const formPage = document.getElementById('formPage');
+        const startButton = document.getElementById('startButton');
+        const body = document.body;
+
+        startButton.addEventListener('click', () => {
+            // Hide landing page
+            landingPage.classList.add('hidden');
+            
+            // Show form page
+            formPage.classList.remove('hidden');
+
+            // Change background
+            body.classList.remove('landing-bg');
+            body.classList.add('form-bg');
+        });
+    </script>
 
 </body>
 </html>
