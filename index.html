@@ -15,9 +15,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
     
-    <!-- PWA Manifest Link (you'll need to create this file) -->
+    <!-- PWA Manifest Link -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#2EA0DD">
 
     <style>
         /* Custom styles for the app */
@@ -62,6 +62,40 @@
             text-align: left;
             padding-left: 1.5rem;
         }
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 50; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto; /* 10% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="landing-bg">
@@ -79,7 +113,7 @@
             </div>
 
             <header class="text-center w-full max-w-md z-10">
-                <img src="UiTM-Logo.png" alt="Universiti Teknologi MARA Logo" class="mx-auto mb-4 h-16 object-contain">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/6/6f/Universiti_Teknologi_MARA_logo.svg/1200px-Universiti_Teknologi_MARA_logo.svg.png" alt="Universiti Teknologi MARA Logo" class="mx-auto mb-4 h-16 object-contain">
                 <div class="inline-block bg-teal-500 text-black text-xl font-medium rounded-[50%/100%] px-10 py-4 shadow-md -rotate-2">
                     EMERGENCY MEDICINE FORMULARY
                 </div>
@@ -88,7 +122,7 @@
             <main class="flex-grow flex items-center justify-center z-10">
                 <div class="relative text-center">
                     <div class="absolute -left-16 -top-8 transform -rotate-180">
-                        <img src="syringe-icon.png" alt="Syringe icon" class="h-20 w-20">
+                        <img src="https://www.svgrepo.com/show/2038/syringe.svg" alt="Syringe icon" class="h-20 w-20">
                     </div>
                     <div class="relative w-64 h-20 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
                         <h1 class="text-white text-5xl font-bangers tracking-wider" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
@@ -96,7 +130,7 @@
                         </h1>
                     </div>
                     <div class="absolute -right-16 -bottom-8 transform rotate-0">
-                         <img src="syringe-icon.png" alt="Syringe icon" class="h-20 w-20">
+                         <img src="https://www.svgrepo.com/show/2038/syringe.svg" alt="Syringe icon" class="h-20 w-20">
                     </div>
                 </div>
             </main>
@@ -125,9 +159,9 @@
 
             <header class="text-center w-full max-w-sm z-10">
                 <div class="bg-white/80 rounded-lg shadow-md p-1 flex items-center justify-center space-x-4">
-                    <img src="heart-icon.png" alt="Heartbeat icon" class="h-12 w-12">
+                    <img src="https://www.svgrepo.com/show/22919/cardiogram.svg" alt="Heartbeat icon" class="h-12 w-12">
                     <h1 class="text-3xl text-gray-800 tracking-wider font-luckiest-guy">PLEASE INSERT</h1>
-                    <img src="heart-icon.png" alt="Heartbeat icon" class="h-12 w-12">
+                    <img src="https://www.svgrepo.com/show/22919/cardiogram.svg" alt="Heartbeat icon" class="h-12 w-12">
                 </div>
             </header>
 
@@ -135,7 +169,7 @@
                 <form id="patientForm" class="space-y-6">
                     <div class="flex items-center">
                         <label for="age" class="w-1/3 text-lg text-gray-800 font-luckiest-guy tracking-wider">AGE:</label>
-                        <input type="number" id="age" name="age" class="w-2/3 p-2 rounded-lg border-2 border-gray-300 shadow-inner bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400">
+                        <input type="number" id="age" name="age" class="w-2/3 p-2 rounded-lg border-2 border-gray-300 shadow-inner bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400" placeholder="years">
                     </div>
                     <div class="flex items-center">
                         <label for="gender" class="w-1/3 text-lg text-gray-800 font-luckiest-guy tracking-wider">GENDER:</label>
@@ -153,11 +187,15 @@
                         <input type="number" id="height" name="height" class="w-2/3 p-2 rounded-lg border-2 border-gray-300 shadow-inner bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400" placeholder="cm">
                     </div>
                 </form>
+                 <div id="formError" class="text-red-200 font-bold text-center mt-4"></div>
             </main>
 
-            <footer class="w-full max-w-md text-center z-10">
+            <footer class="w-full max-w-md text-center z-10 space-y-3">
                 <button id="formStartButton" class="bg-red-500 text-white font-bold text-2xl rounded-xl px-16 py-3 shadow-lg border-b-4 border-red-700 transform transition-transform duration-200 hover:scale-105 active:border-b-2 active:translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-red-300">
                     START
+                </button>
+                <button id="resetFormButton" class="bg-gray-500 text-white font-bold text-lg rounded-xl px-12 py-2 shadow-lg border-b-4 border-gray-700 transform transition-transform duration-200 hover:scale-105 active:border-b-2 active:translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-gray-300">
+                    RESET
                 </button>
             </footer>
         </div>
@@ -176,9 +214,9 @@
 
             <header class="text-center w-full max-w-sm z-10">
                 <div class="bg-white/80 rounded-lg shadow-md p-1 flex items-center justify-center space-x-4">
-                    <img src="heart-icon.png" alt="Heartbeat icon" class="h-12 w-12">
+                    <img src="https://www.svgrepo.com/show/22919/cardiogram.svg" alt="Heartbeat icon" class="h-12 w-12">
                     <h1 class="text-3xl text-gray-800 tracking-wider font-luckiest-guy">HERE YOU GO!</h1>
-                    <img src="heart-icon.png" alt="Heartbeat icon" class="h-12 w-12">
+                    <img src="https://www.svgrepo.com/show/22919/cardiogram.svg" alt="Heartbeat icon" class="h-12 w-12">
                 </div>
             </header>
 
@@ -206,7 +244,7 @@
                 <button id="continueButton" class="bg-red-500 text-white font-bold text-xl rounded-xl px-12 py-3 shadow-lg border-b-4 border-red-700 transform transition-transform duration-200 hover:scale-105 active:border-b-2 active:translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-red-300">
                     CONTINUE
                 </button>
-                <button class="bg-red-500 text-white font-bold text-xl rounded-xl px-12 py-3 shadow-lg border-b-4 border-red-700 transform transition-transform duration-200 hover:scale-105 active:border-b-2 active:translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-red-300">
+                <button id="broselowButton" class="bg-blue-500 text-white font-bold text-xl rounded-xl px-12 py-3 shadow-lg border-b-4 border-blue-700 transform transition-transform duration-200 hover:scale-105 active:border-b-2 active:translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-blue-300">
                     BROSELOW CHART
                 </button>
             </footer>
@@ -214,42 +252,44 @@
     </section>
 
     <!-- ================================================== -->
-    <!-- ================= MENU PAGE SECTION ================ -->
+    <!-- ================ MENU PAGE SECTION ================ -->
     <!-- ================================================== -->
     <section id="menuPage" class="hidden">
         <div class="relative min-h-screen flex flex-col items-center justify-around p-6 overflow-hidden">
 
             <header class="text-center w-full max-w-sm z-10">
                 <div class="bg-red-500 rounded-lg shadow-lg p-2 flex items-center justify-center space-x-3 border-4 border-dashed border-white">
-                    <img src="stethoscope-icon.png" alt="Stethoscope icon" class="h-12 w-12">
+                    <img src="https://www.svgrepo.com/show/38743/stethoscope.svg" alt="Stethoscope icon" class="h-12 w-12">
                     <h1 class="text-4xl text-white tracking-wider font-bangers">MENU</h1>
-                    <img src="stethoscope-icon.png" alt="Stethoscope icon" class="h-12 w-12">
+                    <img src="https://www.svgrepo.com/show/38743/stethoscope.svg" alt="Stethoscope icon" class="h-12 w-12">
                 </div>
             </header>
 
             <main class="w-full max-w-xs z-10">
                 <div class="space-y-4">
                     <button id="drugDoseButton" class="w-full bg-teal-500 text-black font-bold text-lg rounded-lg p-3 shadow-lg border-b-4 border-teal-700 hover:bg-teal-600 transition-all transform hover:scale-105 flex items-center justify-center space-x-3">
-                        <img src="drug-dose-icon.png" alt="Drug dose icon" class="w-6 h-6">
+                        <img src="https://www.svgrepo.com/show/2854/pills.svg" alt="Drug dose icon" class="w-6 h-6">
                         <span>DRUG DOSE CALCULATOR</span>
                     </button>
                     <button id="fluidRegimenButton" class="w-full bg-teal-500 text-black font-bold text-lg rounded-lg p-3 shadow-lg border-b-4 border-teal-700 hover:bg-teal-600 transition-all transform hover:scale-105 flex items-center justify-center space-x-3">
-                        <img src="fluid-regimen-icon.png" alt="Fluid regimen icon" class="w-6 h-6">
+                        <img src="https://www.svgrepo.com/show/2807/iv-bag.svg" alt="Fluid regimen icon" class="w-6 h-6">
                         <span>FLUID REGIMEN CALCULATOR</span>
                     </button>
                     <button id="medicalEquipmentsButton" class="w-full bg-teal-500 text-black font-bold text-lg rounded-lg p-3 shadow-lg border-b-4 border-teal-700 hover:bg-teal-600 transition-all transform hover:scale-105 flex items-center justify-center space-x-3">
-                        <img src="medical-equipment-icon.png" alt="Medical equipment icon" class="w-6 h-6">
+                        <img src="https://www.svgrepo.com/show/36187/first-aid-kit.svg" alt="Medical equipment icon" class="w-6 h-6">
                         <span>MEDICAL EQUIPMENTS</span>
                     </button>
                     <button id="resuscitationButton" class="w-full bg-teal-500 text-black font-bold text-lg rounded-lg p-3 shadow-lg border-b-4 border-teal-700 hover:bg-teal-600 transition-all transform hover:scale-105 flex items-center justify-center space-x-3">
-                        <img src="resuscitation-icon.png" alt="Resuscitation icon" class="w-6 h-6">
+                        <img src="https://www.svgrepo.com/show/3028/defibrillator.svg" alt="Resuscitation icon" class="w-6 h-6">
                         <span>RESUSCITATION</span>
                     </button>
                 </div>
             </main>
 
             <footer class="w-full max-w-md text-center z-10">
-                <!-- Stethoscope icon removed from here -->
+                 <button id="menuBackButton" class="bg-gray-600 text-white font-bold text-xl rounded-lg px-10 py-2 shadow-lg hover:bg-gray-700">
+                    BACK TO PATIENT INFO
+                </button>
             </footer>
         </div>
     </section>
@@ -261,9 +301,9 @@
         <div class="relative min-h-screen flex flex-col items-center justify-start p-6 space-y-8 overflow-hidden">
             <header class="text-center w-full max-w-sm z-10">
                 <div class="bg-red-500 rounded-lg shadow-lg p-2 flex items-center justify-center space-x-3 border-4 border-dashed border-white">
-                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                    <img src="https://www.svgrepo.com/show/4526/medicine.svg" alt="Medical icon" class="h-12 w-12 rounded-full">
                     <h1 class="text-4xl text-white tracking-wider font-bangers">EZACCESS</h1>
-                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                    <img src="https://www.svgrepo.com/show/4526/medicine.svg" alt="Medical icon" class="h-12 w-12 rounded-full">
                 </div>
             </header>
 
@@ -297,9 +337,9 @@
         <div class="relative min-h-screen flex flex-col items-center justify-start p-6 space-y-8 overflow-hidden">
             <header class="text-center w-full max-w-sm z-10">
                 <div class="bg-red-500 rounded-lg shadow-lg p-2 flex items-center justify-center space-x-3 border-4 border-dashed border-white">
-                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                    <img src="https://www.svgrepo.com/show/2807/iv-bag.svg" alt="Medical icon" class="h-12 w-12 rounded-full">
                     <h1 class="text-4xl text-white tracking-wider font-bangers">EZACCESS</h1>
-                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                    <img src="https://www.svgrepo.com/show/2807/iv-bag.svg" alt="Medical icon" class="h-12 w-12 rounded-full">
                 </div>
             </header>
 
@@ -310,9 +350,9 @@
             <main class="w-full max-w-sm z-10">
                 <p class="text-center font-bold mb-4">PLEASE SELECT:</p>
                 <div class="space-y-4">
-                    <button class="w-full arrow-button">TOTAL DAILY FLUID REQUIREMENT</button>
+                    <button class="w-full arrow-button" onclick="showFluidResult('daily')">TOTAL DAILY FLUID REQUIREMENT</button>
                     <button id="hollidaySegarButton" class="w-full arrow-button">HOLLIDAY SEGAR</button>
-                    <button class="w-full arrow-button">DENGUE FLUID REGIME</button>
+                    <button class="w-full arrow-button" onclick="showFluidResult('dengue')">DENGUE FLUID REGIME</button>
                 </div>
             </main>
 
@@ -338,9 +378,9 @@
             <main class="w-full max-w-sm z-10">
                 <p class="text-center font-bold mb-4">PLEASE SELECT:</p>
                 <div class="space-y-4">
-                    <button id="fullMaintenanceButton" class="w-full arrow-button">FULL MAINTENANCE</button>
-                    <button class="w-full arrow-button">BOLUS</button>
-                    <button class="w-full arrow-button">DEFICIT CORRECTION</button>
+                    <button id="fullMaintenanceButton" class="w-full arrow-button" onclick="showFluidResult('maintenance')">FULL MAINTENANCE</button>
+                    <button class="w-full arrow-button" onclick="showFluidResult('bolus')">BOLUS</button>
+                    <button class="w-full arrow-button" onclick="showFluidResult('deficit')">DEFICIT CORRECTION</button>
                 </div>
             </main>
 
@@ -358,7 +398,7 @@
     <section id="fluidResultPage" class="hidden">
         <div class="relative min-h-screen flex flex-col items-center justify-center p-6 space-y-8 overflow-hidden">
             <main class="w-full max-w-sm z-10 bg-white p-6 rounded-lg shadow-lg">
-                <h1 class="text-2xl font-bold text-center mb-4 font-bangers tracking-wider">FLUID REGIME</h1>
+                <h1 id="fluidResultTitle" class="text-2xl font-bold text-center mb-4 font-bangers tracking-wider">FLUID REGIME</h1>
                 <div id="fluidResultDetails" class="text-left space-y-2">
                     <!-- Fluid calculation details will be displayed here -->
                 </div>
@@ -378,9 +418,9 @@
         <div class="relative min-h-screen flex flex-col items-center justify-start p-6 space-y-8 overflow-hidden">
             <header class="text-center w-full max-w-sm z-10">
                 <div class="bg-red-500 rounded-lg shadow-lg p-2 flex items-center justify-center space-x-3 border-4 border-dashed border-white">
-                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                    <img src="https://www.svgrepo.com/show/36187/first-aid-kit.svg" alt="Medical icon" class="h-12 w-12 rounded-full">
                     <h1 class="text-4xl text-white tracking-wider font-bangers">EZACCESS</h1>
-                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                    <img src="https://www.svgrepo.com/show/36187/first-aid-kit.svg" alt="Medical icon" class="h-12 w-12 rounded-full">
                 </div>
             </header>
 
@@ -388,14 +428,8 @@
                 MEDICAL EQUIPMENTS
             </div>
 
-            <main class="w-full max-w-sm z-10 bg-white p-4 rounded-lg">
-                <p class="font-bold mb-2">THE SUITABLE SIZES FOR SPECIFIC MEDICAL EQUIPMENT WILL BE DISPLAYED HERE:</p>
-                <ol class="list-decimal list-inside space-y-2">
-                    <li>LARYNGOSCOPE BLADE SIZE AND TYPE</li>
-                    <li>ENDOTRACHEAL TUBE SIZE (CUFFED/UNCUFFED)</li>
-                    <li>ANCHOR OF ETT</li>
-                    <li>NASOPHARYNGEAL TUBE SIZE</li>
-                </ol>
+            <main id="medicalEquipmentsMain" class="w-full max-w-sm z-10 bg-white p-4 rounded-lg">
+                <!-- Equipment info will be displayed here -->
             </main>
 
             <footer class="w-full max-w-md text-center z-10">
@@ -413,9 +447,9 @@
         <div class="relative min-h-screen flex flex-col items-center justify-start p-6 space-y-8 overflow-hidden">
             <header class="text-center w-full max-w-sm z-10">
                 <div class="bg-red-500 rounded-lg shadow-lg p-2 flex items-center justify-center space-x-3 border-4 border-dashed border-white">
-                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                    <img src="https://www.svgrepo.com/show/3028/defibrillator.svg" alt="Medical icon" class="h-12 w-12 rounded-full">
                     <h1 class="text-4xl text-white tracking-wider font-bangers">EZACCESS</h1>
-                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                    <img src="https://www.svgrepo.com/show/3028/defibrillator.svg" alt="Medical icon" class="h-12 w-12 rounded-full">
                 </div>
             </header>
 
@@ -423,14 +457,8 @@
                 RESUSCITATION
             </div>
 
-            <main class="w-full max-w-sm z-10 bg-white p-4 rounded-lg">
-                <p class="font-bold mb-2">SPECIFIC CALCULATED DOSES FOR RESUSCITATION DRUGS WILL BE DISPLAYED HERE, INCLUDING:</p>
-                <ol class="list-decimal list-inside space-y-2">
-                    <li>PREMEDICATIONS</li>
-                    <li>INOTROPES</li>
-                    <li>ANTIEPILEPTICS</li>
-                    <li>ETC</li>
-                </ol>
+            <main id="resuscitationMain" class="w-full max-w-sm z-10 bg-white p-4 rounded-lg">
+                <!-- Resuscitation drug info will be displayed here -->
             </main>
 
             <footer class="w-full max-w-md text-center z-10">
@@ -440,12 +468,36 @@
             </footer>
         </div>
     </section>
+    
+    <!-- ================================================== -->
+    <!-- ================== MODAL SECTION ================= -->
+    <!-- ================================================== -->
+    <div id="broselowModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 class="text-2xl font-bold text-center mb-4">Broselow Tape</h2>
+            <img src="https://i.pinimg.com/originals/9b/6e/b6/9b6eb6d70f1917b08a991b6e492f3a6a.jpg" alt="Broselow Tape Chart" class="mx-auto">
+        </div>
+    </div>
 
 
     <!-- JavaScript to switch between pages -->
     <script>
         // ==================================================
-        // ============== PAGE NAVIGATION ===================
+        // ============== SERVICE WORKER ====================
+        // ==================================================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js').then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+
+        // ==================================================
+        // ============== PAGE ELEMENTS =====================
         // ==================================================
         const landingPage = document.getElementById('landingPage');
         const formPage = document.getElementById('formPage');
@@ -457,27 +509,35 @@
         const fluidResultPage = document.getElementById('fluidResultPage');
         const medicalEquipmentsPage = document.getElementById('medicalEquipmentsPage');
         const resuscitationPage = document.getElementById('resuscitationPage');
+        const body = document.body;
 
         // Buttons
         const startButton = document.getElementById('startButton');
         const devModeButton = document.getElementById('devModeButton');
         const formStartButton = document.getElementById('formStartButton');
+        const resetFormButton = document.getElementById('resetFormButton');
         const continueButton = document.getElementById('continueButton');
+        const broselowButton = document.getElementById('broselowButton');
+        const menuBackButton = document.getElementById('menuBackButton');
         const drugDoseButton = document.getElementById('drugDoseButton');
         const drugDoseBackButton = document.getElementById('drugDoseBackButton');
         const fluidRegimenButton = document.getElementById('fluidRegimenButton');
         const fluidRegimenBackButton = document.getElementById('fluidRegimenBackButton');
         const hollidaySegarButton = document.getElementById('hollidaySegarButton');
         const hollidaySegarBackButton = document.getElementById('hollidaySegarBackButton');
-        const fullMaintenanceButton = document.getElementById('fullMaintenanceButton');
         const fluidResultBackButton = document.getElementById('fluidResultBackButton');
         const medicalEquipmentsButton = document.getElementById('medicalEquipmentsButton');
         const medicalEquipmentsBackButton = document.getElementById('medicalEquipmentsBackButton');
         const resuscitationButton = document.getElementById('resuscitationButton');
         const resuscitationBackButton = document.getElementById('resuscitationBackButton');
         
-        const body = document.body;
+        // Modal
+        const broselowModal = document.getElementById('broselowModal');
+        const closeButton = document.querySelector('.close-button');
 
+        // ==================================================
+        // ============== PAGE NAVIGATION ===================
+        // ==================================================
         startButton.addEventListener('click', () => {
             landingPage.classList.add('hidden');
             formPage.classList.remove('hidden');
@@ -487,7 +547,7 @@
 
         devModeButton.addEventListener('click', () => {
             // Set default patient data for dev mode
-            patientWeight = 70; // example weight
+            patientData = { age: 5, weight: 18, height: 110, gender: 'Male' };
             landingPage.classList.add('hidden');
             menuPage.classList.remove('hidden');
             body.classList.remove('landing-bg');
@@ -495,12 +555,39 @@
         });
 
         formStartButton.addEventListener('click', () => {
-            calculateAndShowResults();
+            if (calculateAndShowResults()) {
+                formPage.classList.add('hidden');
+                resultsPage.classList.remove('hidden');
+            }
+        });
+
+        resetFormButton.addEventListener('click', () => {
+            document.getElementById('patientForm').reset();
+            document.getElementById('formError').innerText = '';
         });
 
         continueButton.addEventListener('click', () => {
             resultsPage.classList.add('hidden');
             menuPage.classList.remove('hidden');
+        });
+
+        broselowButton.addEventListener('click', () => {
+            broselowModal.style.display = 'block';
+        });
+
+        closeButton.addEventListener('click', () => {
+            broselowModal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', (event) => {
+            if (event.target == broselowModal) {
+                broselowModal.style.display = 'none';
+            }
+        });
+
+        menuBackButton.addEventListener('click', () => {
+            menuPage.classList.add('hidden');
+            formPage.classList.remove('hidden');
         });
 
         drugDoseButton.addEventListener('click', () => {
@@ -541,18 +628,18 @@
             fluidRegimenPage.classList.remove('hidden');
         });
 
-        fullMaintenanceButton.addEventListener('click', () => {
-            calculateAndShowFluids();
-            hollidaySegarPage.classList.add('hidden');
-            fluidResultPage.classList.remove('hidden');
-        });
-
         fluidResultBackButton.addEventListener('click', () => {
             fluidResultPage.classList.add('hidden');
-            hollidaySegarPage.classList.remove('hidden');
+            // Go back to the previous menu
+            if (document.getElementById('hollidaySegarPage').classList.contains('hidden')) {
+                fluidRegimenPage.classList.remove('hidden');
+            } else {
+                hollidaySegarPage.classList.remove('hidden');
+            }
         });
 
         medicalEquipmentsButton.addEventListener('click', () => {
+            calculateMedicalEquipments();
             menuPage.classList.add('hidden');
             medicalEquipmentsPage.classList.remove('hidden');
             body.classList.remove('app-bg');
@@ -567,6 +654,7 @@
         });
 
         resuscitationButton.addEventListener('click', () => {
+            calculateResuscitationDrugs();
             menuPage.classList.add('hidden');
             resuscitationPage.classList.remove('hidden');
             body.classList.remove('app-bg');
@@ -583,26 +671,29 @@
         // ==================================================
         // =========== PATIENT DATA & CALCULATIONS ==========
         // ==================================================
-        let patientWeight = 0; // To store patient weight globally
+        let patientData = {};
+        const ageInput = document.getElementById('age');
         const weightInput = document.getElementById('weight');
         const heightInput = document.getElementById('height');
         const genderInput = document.getElementById('gender');
         const bmiOutput = document.getElementById('bmiOutput');
         const adjBwOutput = document.getElementById('adjBwOutput');
         const idealBwOutput = document.getElementById('idealBwOutput');
-        const fluidResultDetails = document.getElementById('fluidResultDetails');
+        const formError = document.getElementById('formError');
 
         function calculateAndShowResults() {
+            const age = parseFloat(ageInput.value);
             const weightKg = parseFloat(weightInput.value);
             const heightCm = parseFloat(heightInput.value);
             const gender = genderInput.value;
 
-            if (!weightKg || !heightCm || weightKg <= 0 || heightCm <= 0) {
-                console.error("Please enter valid weight and height.");
-                return; 
+            if (!age || !weightKg || !heightCm || age <= 0 || weightKg <= 0 || heightCm <= 0) {
+                formError.innerText = "Please enter valid patient data.";
+                return false;
             }
+            formError.innerText = "";
             
-            patientWeight = weightKg; // Store weight for later use
+            patientData = { age, weight: weightKg, height: heightCm, gender };
 
             const heightM = heightCm / 100;
             const bmi = weightKg / (heightM * heightM);
@@ -619,39 +710,176 @@
 
             const adjBw = idealBw + 0.4 * (weightKg - idealBw);
 
-            bmiOutput.innerText = bmi.toFixed(1);
+            bmiOutput.innerText = `${bmi.toFixed(1)} kg/m²`;
             adjBwOutput.innerText = `${adjBw.toFixed(1)} kg`;
             idealBwOutput.innerText = `${idealBw.toFixed(1)} kg`;
 
-            formPage.classList.add('hidden');
-            resultsPage.classList.remove('hidden');
+            return true;
         }
 
-        function calculateAndShowFluids() {
-            if (patientWeight <= 0) {
+        // ==================================================
+        // ============ FLUID CALCULATIONS ==================
+        // ==================================================
+        const fluidResultTitle = document.getElementById('fluidResultTitle');
+        const fluidResultDetails = document.getElementById('fluidResultDetails');
+
+        function showFluidResult(type) {
+            if (!patientData.weight || patientData.weight <= 0) {
                 fluidResultDetails.innerHTML = "<p>Patient weight not set. Please go back and enter patient details.</p>";
                 return;
             }
 
-            let dailyFluid = 0;
-            if (patientWeight <= 10) {
-                dailyFluid = patientWeight * 100;
-            } else if (patientWeight <= 20) {
-                dailyFluid = 1000 + ((patientWeight - 10) * 50);
-            } else {
-                dailyFluid = 1500 + ((patientWeight - 20) * 20);
+            let title = '';
+            let details = '';
+            const weight = patientData.weight;
+
+            switch (type) {
+                case 'daily':
+                case 'maintenance':
+                    title = 'Maintenance Fluid Calculation';
+                    let dailyFluid = 0;
+                    if (weight <= 10) {
+                        dailyFluid = weight * 100;
+                    } else if (weight <= 20) {
+                        dailyFluid = 1000 + ((weight - 10) * 50);
+                    } else {
+                        dailyFluid = 1500 + ((weight - 20) * 20);
+                    }
+                    const hourlyRate = dailyFluid / 24;
+                    details = `
+                        <p><strong>Patient Weight:</strong> ${weight.toFixed(1)} kg</p>
+                        <p><strong>Type of Fluid:</strong> Isotonic crystalloid (e.g., Normal Saline, Lactated Ringer's) is typically used.</p>
+                        <p><strong>Total Daily Fluid:</strong> ${dailyFluid.toFixed(0)} ml/day</p>
+                        <p><strong>Specific Rate:</strong> ${hourlyRate.toFixed(1)} ml/hr</p>
+                        <p><strong>Duration of Infusion:</strong> Continuous maintenance.</p>
+                    `;
+                    break;
+                case 'bolus':
+                    title = 'Fluid Bolus Calculation';
+                    const bolusAmount = weight * 20; // 20 ml/kg
+                    details = `
+                        <p><strong>Patient Weight:</strong> ${weight.toFixed(1)} kg</p>
+                        <p><strong>Type of Fluid:</strong> Isotonic crystalloid (e.g., Normal Saline).</p>
+                        <p><strong>Bolus Volume:</strong> ${bolusAmount.toFixed(0)} ml</p>
+                        <p><strong>Administration:</strong> Administer over 20-30 minutes. Reassess patient after bolus.</p>
+                    `;
+                    break;
+                case 'deficit':
+                    title = 'Deficit Correction Calculation';
+                    // Assuming 10% dehydration for this example
+                    const deficit = weight * 100; // 100 ml/kg for 10%
+                    const halfDeficit = deficit / 2;
+                    const first8hRate = halfDeficit / 8;
+                    const next16hRate = halfDeficit / 16;
+                     details = `
+                        <p><strong>Patient Weight:</strong> ${weight.toFixed(1)} kg</p>
+                        <p><strong>Assuming 10% Dehydration:</strong></p>
+                        <p><strong>Total Deficit:</strong> ${deficit.toFixed(0)} ml</p>
+                        <p><strong>Correction Plan:</strong></p>
+                        <ul>
+                            <li>- Replace 50% (${halfDeficit.toFixed(0)} ml) over the first 8 hours at <strong>${first8hRate.toFixed(1)} ml/hr</strong>.</li>
+                            <li>- Replace remaining 50% (${halfDeficit.toFixed(0)} ml) over the next 16 hours at <strong>${next16hRate.toFixed(1)} ml/hr</strong>.</li>
+                        </ul>
+                        <p><em>Note: This does not include maintenance fluids.</em></p>
+                    `;
+                    break;
+                case 'dengue':
+                    title = 'Dengue Fluid Regime (Hypotensive Shock)';
+                    const dengueBolus = weight * 20;
+                    details = `
+                        <p><strong>Patient Weight:</strong> ${weight.toFixed(1)} kg</p>
+                        <p><strong>For Dengue Shock Syndrome:</strong></p>
+                        <p><strong>Initial Bolus:</strong> Start with an isotonic crystalloid bolus of ${dengueBolus.toFixed(0)} ml (20 ml/kg) over 15-30 minutes.</p>
+                        <p><strong>Reassessment:</strong> Reassess clinical status. If improving, start maintenance with crystalloids at 5-7 ml/kg/hr. If not improving, consider a second bolus.</p>
+                        <p><strong>Important:</strong> Fluid management in dengue is critical and must be guided by clinical signs, hematocrit, and hemodynamic status. This is a simplified guideline.</p>
+                    `;
+                    break;
             }
 
-            const hourlyRate = dailyFluid / 24;
+            fluidResultTitle.innerText = title;
+            fluidResultDetails.innerHTML = details;
 
-            fluidResultDetails.innerHTML = `
-                <p><strong>Patient Weight:</strong> ${patientWeight.toFixed(1)} kg</p>
-                <p><strong>Type of Fluid:</strong> Isotonic crystalloid (e.g., Normal Saline, Lactated Ringer's) is typically used.</p>
-                <p><strong>Total Daily Fluid:</strong> ${dailyFluid.toFixed(0)} ml/day</p>
-                <p><strong>Specific Rate:</strong> ${hourlyRate.toFixed(1)} ml/hr</p>
-                <p><strong>Duration of Infusion:</strong> Continuous maintenance.</p>
-            `;
+            // Hide other pages and show result page
+            fluidRegimenPage.classList.add('hidden');
+            hollidaySegarPage.classList.add('hidden');
+            fluidResultPage.classList.remove('hidden');
         }
+
+        // ==================================================
+        // ============ MEDICAL EQUIPMENT SIZING ============
+        // ==================================================
+        const medicalEquipmentsMain = document.getElementById('medicalEquipmentsMain');
+
+        function calculateMedicalEquipments() {
+            const { age, weight } = patientData;
+            let content = `<p class="font-bold mb-2">Suitable equipment sizes for a ${age}-year-old weighing ${weight} kg:</p><ul class="list-disc list-inside space-y-2">`;
+
+            // Laryngoscope Blade
+            let bladeSize, bladeType;
+            if (age < 1) { bladeSize = 1; bladeType = 'Miller'; }
+            else if (age < 2) { bladeSize = 1.5; bladeType = 'Miller/Mac'; }
+            else if (age < 6) { bladeSize = 2; bladeType = 'Mac'; }
+            else if (age < 12) { bladeSize = 2; bladeType = 'Mac'; }
+            else { bladeSize = 3; bladeType = 'Mac'; }
+            content += `<li><strong>Laryngoscope Blade:</strong> Size ${bladeSize} (${bladeType})</li>`;
+
+            // Endotracheal Tube (ETT)
+            let ettUncuffed = (age / 4) + 4;
+            let ettCuffed = (age / 4) + 3.5;
+            content += `<li><strong>ETT Size (Uncuffed):</strong> ${ettUncuffed.toFixed(1)} mm</li>`;
+            content += `<li><strong>ETT Size (Cuffed):</strong> ${ettCuffed.toFixed(1)} mm</li>`;
+            content += `<li><strong>ETT Anchor (at lips):</strong> ${((age / 2) + 12).toFixed(1)} cm or ETT size x 3</li>`;
+
+            // Nasopharyngeal Airway
+            // This is a very rough estimate, often based on measuring from nostril to earlobe
+            let npaSize = ettCuffed + 1; // A very rough guide
+            content += `<li><strong>Nasopharyngeal Airway:</strong> Approx. ${npaSize.toFixed(1)} Fr</li>`;
+
+            content += '</ul>';
+            medicalEquipmentsMain.innerHTML = content;
+        }
+
+        // ==================================================
+        // ============ RESUSCITATION DRUGS =================
+        // ==================================================
+        const resuscitationMain = document.getElementById('resuscitationMain');
+
+        function calculateResuscitationDrugs() {
+            const { weight } = patientData;
+            let content = `<p class="font-bold mb-2">Calculated doses for a ${weight} kg patient:</p><ul class="list-disc list-inside space-y-2">`;
+            
+            // Adrenaline (1:10,000) for cardiac arrest
+            const adrenalineDose = (weight * 0.01).toFixed(2); // mg
+            const adrenalineVol = (weight * 0.1).toFixed(2); // ml of 1:10,000
+            content += `<li><strong>Adrenaline (Cardiac Arrest):</strong> ${adrenalineDose} mg (${adrenalineVol} ml of 1:10,000)</li>`;
+
+            // Amiodarone for VF/VT
+            const amiodaroneDose = (weight * 5).toFixed(1);
+            content += `<li><strong>Amiodarone (VF/VT):</strong> ${amiodaroneDose} mg</li>`;
+
+            // Atropine for bradycardia
+            const atropineDose = (weight * 0.02).toFixed(2);
+            content += `<li><strong>Atropine (Bradycardia):</strong> ${atropineDose} mg</li>`;
+
+            // Dextrose for hypoglycemia
+            let dextroseDose, dextroseType;
+            if (weight < 15) { // Neonates/infants
+                dextroseDose = (weight * 2).toFixed(1); // ml of D10W
+                dextroseType = 'D10W';
+            } else {
+                dextroseDose = (weight * 1).toFixed(1); // ml of D50W
+                dextroseType = 'D50W';
+            }
+            content += `<li><strong>Dextrose (Hypoglycemia):</strong> ${dextroseDose} ml of ${dextroseType}</li>`;
+
+            // Lorazepam for seizures
+            const lorazepamDose = (weight * 0.1).toFixed(2);
+            content += `<li><strong>Lorazepam (Seizures):</strong> ${lorazepamDose} mg</li>`;
+
+            content += '</ul>';
+            resuscitationMain.innerHTML = content;
+        }
+
 
         // ==================================================
         // ============ DRUG SEARCH FUNCTIONALITY ===========
@@ -659,34 +887,33 @@
         const drugSearchInput = document.getElementById('drugSearch');
         const autocompleteList = document.getElementById('autocompleteList');
         const drugInfo = document.getElementById('drugInfo');
-
         const drugDatabase = [
-            { name: 'Paracetamol', details: '<b>Dose:</b> 10-15 mg/kg per dose.<br><b>Indications:</b> Pain, fever.<br><b>Contraindications:</b> Severe liver disease.' },
-            { name: 'Ibuprofen', details: '<b>Dose:</b> 5-10 mg/kg per dose.<br><b>Indications:</b> Pain, fever, inflammation.<br><b>Contraindications:</b> Aspirin allergy, active peptic ulcer.' },
-            { name: 'Amoxicillin', details: '<b>Dose:</b> 25-50 mg/kg/day in divided doses.<br><b>Indications:</b> Bacterial infections.<br><b>Contraindications:</b> Penicillin allergy.' },
-            { name: 'Adrenaline', details: '<b>Dose:</b> 0.01 mg/kg.<br><b>Indications:</b> Anaphylaxis, cardiac arrest.<br><b>Contraindications:</b> None in a life-threatening situation.' },
-            { name: 'Amiodarone', details: '<b>Dose:</b> 5 mg/kg IV over 20-60 minutes.<br><b>Indications:</b> Ventricular arrhythmias.<br><b>Contraindications:</b> Severe sinus node dysfunction.' },
-            { name: 'Aspirin', details: '<b>Dose:</b> 160-325 mg chewed for ACS.<br><b>Indications:</b> Acute Coronary Syndrome.<br><b>Contraindications:</b> Allergy, active bleeding.' },
-            { name: 'Atropine', details: '<b>Dose:</b> 0.5 mg IV/IO every 3-5 mins for bradycardia.<br><b>Indications:</b> Symptomatic bradycardia.<br><b>Contraindications:</b> Tachycardia, glaucoma.' },
-            { name: 'Calcium Gluconate', details: '<b>Dose:</b> 1-2 g IV over 5-10 mins.<br><b>Indications:</b> Hyperkalemia, calcium channel blocker overdose.<br><b>Contraindications:</b> Hypercalcemia, digitalis toxicity.' },
-            { name: 'Dexamethasone', details: '<b>Dose:</b> 0.6 mg/kg for croup.<br><b>Indications:</b> Croup, asthma exacerbation.<br><b>Contraindications:</b> Systemic fungal infections.' },
-            { name: 'Dextrose 50%', details: '<b>Dose:</b> 25 g (50 mL) IV.<br><b>Indications:</b> Hypoglycemia.<br><b>Contraindications:</b> Intracranial hemorrhage.' },
-            { name: 'Diazepam', details: '<b>Dose:</b> 5-10 mg IV for seizures.<br><b>Indications:</b> Seizures, anxiety, sedation.<br><b>Contraindications:</b> Severe respiratory depression.' },
-            { name: 'Dopamine', details: '<b>Dose:</b> 2-20 mcg/kg/min infusion.<br><b>Indications:</b> Hypotension, shock.<br><b>Contraindications:</b> Pheochromocytoma, V-Fib.' },
-            { name: 'Fentanyl', details: '<b>Dose:</b> 1-2 mcg/kg IV/IM.<br><b>Indications:</b> Severe pain.<br><b>Contraindications:</b> Respiratory depression, allergy.' },
-            { name: 'Furosemide', details: '<b>Dose:</b> 20-40 mg IV.<br><b>Indications:</b> Pulmonary edema, heart failure.<br><b>Contraindications:</b> Anuria, hypotension.' },
-            { name: 'Ketamine', details: '<b>Dose:</b> 1-2 mg/kg IV for induction.<br><b>Indications:</b> Sedation, analgesia, induction.<br><b>Contraindications:</b> Severe hypertension, psychosis.' },
-            { name: 'Lidocaine', details: '<b>Dose:</b> 1-1.5 mg/kg IV/IO for cardiac arrest.<br><b>Indications:</b> Ventricular tachycardia/fibrillation.<br><b>Contraindications:</b> Adams-Stokes syndrome, severe heart block.' },
-            { name: 'Lorazepam', details: '<b>Dose:</b> 2-4 mg IV for seizures.<br><b>Indications:</b> Seizures, anxiety.<br><b>Contraindications:</b> Allergy, acute narrow-angle glaucoma.' },
-            { name: 'Magnesium Sulfate', details: '<b>Dose:</b> 1-2 g IV for Torsades de Pointes.<br><b>Indications:</b> Torsades de Pointes, eclampsia, severe asthma.<br><b>Contraindications:</b> Heart block, renal failure.' },
-            { name: 'Midazolam', details: '<b>Dose:</b> 2.5-5 mg IV for sedation.<br><b>Indications:</b> Sedation, seizures.<br><b>Contraindications:</b> Acute narrow-angle glaucoma, shock.' },
-            { name: 'Morphine', details: '<b>Dose:</b> 2-4 mg IV every 5-15 mins.<br><b>Indications:</b> Severe pain.<br><b>Contraindications:</b> Respiratory depression, hypotension.' },
-            { name: 'Naloxone', details: '<b>Dose:</b> 0.4-2 mg IV/IM/IN.<br><b>Indications:</b> Opioid overdose.<br><b>Contraindications:</b> Known hypersensitivity.' },
-            { name: 'Nitroglycerin', details: '<b>Dose:</b> 0.4 mg sublingual every 5 mins.<br><b>Indications:</b> Angina, ACS.<br><b>Contraindications:</b> Hypotension, recent PDE-5 inhibitor use.' },
-            { name: 'Propofol', details: '<b>Dose:</b> 1.5-2.5 mg/kg IV for induction.<br><b>Indications:</b> Anesthesia induction/maintenance, sedation.<br><b>Contraindications:</b> Egg/soy allergy, hypotension.' },
-            { name: 'Rocuronium', details: '<b>Dose:</b> 0.6-1.2 mg/kg IV for RSI.<br><b>Indications:</b> Paralysis for RSI.<br><b>Contraindications:</b> Allergy.' },
-            { name: 'Sodium Bicarbonate', details: '<b>Dose:</b> 1 mEq/kg IV.<br><b>Indications:</b> Metabolic acidosis, certain overdoses.<br><b>Contraindications:</b> Metabolic alkalosis, hypernatremia.' },
-            { name: 'Succinylcholine', details: '<b>Dose:</b> 1-1.5 mg/kg IV for RSI.<br><b>Indications:</b> Paralysis for RSI.<br><b>Contraindications:</b> Hyperkalemia, malignant hyperthermia.' }
+            { "name": "Paracetamol", "dose_per_kg": 15, "unit": "mg", "indications": "Pain, fever.", "contraindications": "Severe liver disease." },
+            { "name": "Ibuprofen", "dose_per_kg": 10, "unit": "mg", "indications": "Pain, fever, inflammation.", "contraindications": "Aspirin allergy, active peptic ulcer." },
+            { "name": "Amoxicillin", "dose_per_kg": 30, "unit": "mg", "indications": "Bacterial infections.", "contraindications": "Penicillin allergy." },
+            { "name": "Adrenaline", "dose_per_kg": 0.01, "unit": "mg", "indications": "Anaphylaxis, cardiac arrest.", "contraindications": "None in a life-threatening situation." },
+            { "name": "Amiodarone", "dose_per_kg": 5, "unit": "mg", "indications": "Ventricular arrhythmias.", "contraindications": "Severe sinus node dysfunction." },
+            { "name": "Aspirin", "dose_per_kg": null, "unit": "mg", "details": "160-325 mg chewed for ACS.", "indications": "Acute Coronary Syndrome.", "contraindications": "Allergy, active bleeding." },
+            { "name": "Atropine", "dose_per_kg": 0.02, "unit": "mg", "indications": "Symptomatic bradycardia.", "contraindications": "Tachycardia, glaucoma." },
+            { "name": "Calcium Gluconate", "dose_per_kg": 60, "unit": "mg", "indications": "Hyperkalemia, calcium channel blocker overdose.", "contraindications": "Hypercalcemia, digitalis toxicity." },
+            { "name": "Dexamethasone", "dose_per_kg": 0.6, "unit": "mg", "indications": "Croup, asthma exacerbation.", "contraindications": "Systemic fungal infections." },
+            { "name": "Dextrose 50%", "dose_per_kg": 1, "unit": "ml", "indications": "Hypoglycemia.", "contraindications": "Intracranial hemorrhage." },
+            { "name": "Diazepam", "dose_per_kg": 0.2, "unit": "mg", "indications": "Seizures, anxiety, sedation.", "contraindications": "Severe respiratory depression." },
+            { "name": "Dopamine", "dose_per_kg": null, "unit": "mcg/kg/min", "details": "2-20 mcg/kg/min infusion.", "indications": "Hypotension, shock.", "contraindications": "Pheochromocytoma, V-Fib." },
+            { "name": "Fentanyl", "dose_per_kg": 0.001, "unit": "mg", "indications": "Severe pain.", "contraindications": "Respiratory depression, allergy." },
+            { "name": "Furosemide", "dose_per_kg": 1, "unit": "mg", "indications": "Pulmonary edema, heart failure.", "contraindications": "Anuria, hypotension." },
+            { "name": "Ketamine", "dose_per_kg": 1.5, "unit": "mg", "indications": "Sedation, analgesia, induction.", "contraindications": "Severe hypertension, psychosis." },
+            { "name": "Lidocaine", "dose_per_kg": 1, "unit": "mg", "indications": "Ventricular tachycardia/fibrillation.", "contraindications": "Adams-Stokes syndrome, severe heart block." },
+            { "name": "Lorazepam", "dose_per_kg": 0.1, "unit": "mg", "indications": "Seizures, anxiety.", "contraindications": "Allergy, acute narrow-angle glaucoma." },
+            { "name": "Magnesium Sulfate", "dose_per_kg": 25, "unit": "mg", "indications": "Torsades de Pointes, eclampsia, severe asthma.", "contraindications": "Heart block, renal failure." },
+            { "name": "Midazolam", "dose_per_kg": 0.1, "unit": "mg", "indications": "Sedation, seizures.", "contraindications": "Acute narrow-angle glaucoma, shock." },
+            { "name": "Morphine", "dose_per_kg": 0.1, "unit": "mg", "indications": "Severe pain.", "contraindications": "Respiratory depression, hypotension." },
+            { "name": "Naloxone", "dose_per_kg": 0.1, "unit": "mg", "indications": "Opioid overdose.", "contraindications": "Known hypersensitivity." },
+            { "name": "Nitroglycerin", "dose_per_kg": null, "unit": "mg", "details": "0.4 mg sublingual every 5 mins.", "indications": "Angina, ACS.", "contraindications": "Hypotension, recent PDE-5 inhibitor use." },
+            { "name": "Propofol", "dose_per_kg": 2, "unit": "mg", "indications": "Anesthesia induction/maintenance, sedation.", "contraindications": "Egg/soy allergy, hypotension." },
+            { "name": "Rocuronium", "dose_per_kg": 1, "unit": "mg", "indications": "Paralysis for RSI.", "contraindications": "Allergy." },
+            { "name": "Sodium Bicarbonate", "dose_per_kg": 1, "unit": "mEq", "indications": "Metabolic acidosis, certain overdoses.", "contraindications": "Metabolic alkalosis, hypernatremia." },
+            { "name": "Succinylcholine", "dose_per_kg": 1.5, "unit": "mg", "indications": "Paralysis for RSI.", "contraindications": "Hyperkalemia, malignant hyperthermia." }
         ];
 
         drugSearchInput.addEventListener('input', () => {
@@ -719,10 +946,17 @@
         });
 
         function showDrugDetails(drug) {
-            drugInfo.innerHTML = `
-                <h3 class="text-xl font-bold mb-2">${drug.name.toUpperCase()}</h3>
-                <p>${drug.details}</p>
-            `;
+            let detailsHtml = `<h3 class="text-xl font-bold mb-2">${drug.name.toUpperCase()}</h3>`;
+            
+            if (drug.dose_per_kg) {
+                const dose = (patientData.weight * drug.dose_per_kg).toFixed(2);
+                detailsHtml += `<p><strong>Calculated Dose:</strong> ${dose} ${drug.unit} (for ${patientData.weight} kg patient)</p>`;
+            }
+
+            detailsHtml += `<p><strong>Indications:</strong> ${drug.indications}</p>`;
+            detailsHtml += `<p><strong>Contraindications:</strong> ${drug.contraindications}</p>`;
+
+            drugInfo.innerHTML = detailsHtml;
             drugInfo.classList.remove('hidden');
         }
 
