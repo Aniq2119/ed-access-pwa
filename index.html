@@ -42,9 +42,9 @@
                 linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
             background-size: 20px 20px;
         }
-        /* Style for the form page background */
-        .form-bg {
-            background-color: #C6D2FF;
+        /* Style for the form and results page background */
+        .app-bg {
+            background-color: #2EA0DD;
             background-image: repeating-linear-gradient(
                 to bottom,
                 transparent,
@@ -52,6 +52,15 @@
                 rgba(255, 255, 255, 0.2) 24px,
                 rgba(255, 255, 255, 0.2) 25px
             );
+        }
+        .arrow-button {
+            background-color: #2dd4bf; /* teal-400 */
+            color: black;
+            font-weight: bold;
+            padding: 1rem;
+            clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
+            text-align: left;
+            padding-left: 1.5rem;
         }
     </style>
 </head>
@@ -92,9 +101,12 @@
                 </div>
             </main>
 
-            <footer class="w-full max-w-md text-center z-10">
+            <footer class="w-full max-w-md text-center z-10 space-y-3">
                 <button id="startButton" class="bg-teal-500 text-white font-bold text-2xl rounded-full px-16 py-3 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-300">
                     Start
+                </button>
+                <button id="devModeButton" class="bg-gray-700 text-white text-sm rounded-full px-4 py-1 shadow-md hover:bg-gray-800">
+                    Developer Mode
                 </button>
             </footer>
         </div>
@@ -112,15 +124,15 @@
             <div class="absolute bottom-1/3 left-12 text-yellow-400 text-3xl">✦</div>
 
             <header class="text-center w-full max-w-sm z-10">
-                <div class="bg-white/80 rounded-lg shadow-md p-3 flex items-center justify-center space-x-4">
-                    <img src="heart-icon.png" alt="Heartbeat icon" class="h-8 w-8">
-                    <h1 class="text-2xl text-gray-800 tracking-wider font-luckiest-guy">PLEASE INSERT</h1>
-                    <img src="heart-icon.png" alt="Heartbeat icon" class="h-8 w-8">
+                <div class="bg-white/80 rounded-lg shadow-md p-1 flex items-center justify-center space-x-4">
+                    <img src="heart-icon.png" alt="Heartbeat icon" class="h-12 w-12">
+                    <h1 class="text-3xl text-gray-800 tracking-wider font-luckiest-guy">PLEASE INSERT</h1>
+                    <img src="heart-icon.png" alt="Heartbeat icon" class="h-12 w-12">
                 </div>
             </header>
 
             <main class="w-full max-w-xs z-10">
-                <form class="space-y-6">
+                <form id="patientForm" class="space-y-6">
                     <div class="flex items-center">
                         <label for="age" class="w-1/3 text-lg text-gray-800 font-luckiest-guy tracking-wider">AGE:</label>
                         <input type="number" id="age" name="age" class="w-2/3 p-2 rounded-lg border-2 border-gray-300 shadow-inner bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400">
@@ -144,31 +156,576 @@
             </main>
 
             <footer class="w-full max-w-md text-center z-10">
-                <button class="bg-red-500 text-white font-bold text-2xl rounded-xl px-16 py-3 shadow-lg border-b-4 border-red-700 transform transition-transform duration-200 hover:scale-105 active:border-b-2 active:translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-red-300">
+                <button id="formStartButton" class="bg-red-500 text-white font-bold text-2xl rounded-xl px-16 py-3 shadow-lg border-b-4 border-red-700 transform transition-transform duration-200 hover:scale-105 active:border-b-2 active:translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-red-300">
                     START
                 </button>
             </footer>
         </div>
     </section>
 
+    <!-- ================================================== -->
+    <!-- ================ RESULTS PAGE SECTION ================ -->
+    <!-- ================================================== -->
+    <section id="resultsPage" class="hidden">
+        <div class="relative min-h-screen flex flex-col items-center justify-around p-6 overflow-hidden">
+
+            <div class="absolute top-1/4 left-8 text-yellow-400 text-2xl transform -rotate-12">~</div>
+            <div class="absolute bottom-1/4 right-8 text-yellow-400 text-2xl transform rotate-12">~</div>
+            <div class="absolute top-1/3 right-12 text-yellow-400 text-3xl">✦</div>
+            <div class="absolute bottom-1/3 left-12 text-yellow-400 text-3xl">✦</div>
+
+            <header class="text-center w-full max-w-sm z-10">
+                <div class="bg-white/80 rounded-lg shadow-md p-1 flex items-center justify-center space-x-4">
+                    <img src="heart-icon.png" alt="Heartbeat icon" class="h-12 w-12">
+                    <h1 class="text-3xl text-gray-800 tracking-wider font-luckiest-guy">HERE YOU GO!</h1>
+                    <img src="heart-icon.png" alt="Heartbeat icon" class="h-12 w-12">
+                </div>
+            </header>
+
+            <main class="w-full max-w-xs z-10">
+                <div class="space-y-4">
+                    <!-- BMI Output -->
+                    <div class="text-center">
+                        <label for="bmiOutput" class="text-xl text-gray-800 font-luckiest-guy tracking-wider">BMI</label>
+                        <div id="bmiOutput" class="mt-1 p-2 h-10 rounded-lg border-2 border-gray-300 shadow-inner bg-gray-100 text-center font-bold text-lg flex items-center justify-center"></div>
+                    </div>
+                    <!-- Adjusted Body Weight Output -->
+                    <div class="text-center">
+                        <label for="adjBwOutput" class="text-xl text-gray-800 font-luckiest-guy tracking-wider">ADJUSTED<br>BODY WEIGHT</label>
+                        <div id="adjBwOutput" class="mt-1 p-2 h-10 rounded-lg border-2 border-gray-300 shadow-inner bg-gray-100 text-center font-bold text-lg flex items-center justify-center"></div>
+                    </div>
+                    <!-- Ideal Body Weight Output -->
+                    <div class="text-center">
+                        <label for="idealBwOutput" class="text-xl text-gray-800 font-luckiest-guy tracking-wider">IDEAL BODY<br>WEIGHT</label>
+                        <div id="idealBwOutput" class="mt-1 p-2 h-10 rounded-lg border-2 border-gray-300 shadow-inner bg-gray-100 text-center font-bold text-lg flex items-center justify-center"></div>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="w-full max-w-md text-center z-10 space-y-3">
+                <button id="continueButton" class="bg-red-500 text-white font-bold text-xl rounded-xl px-12 py-3 shadow-lg border-b-4 border-red-700 transform transition-transform duration-200 hover:scale-105 active:border-b-2 active:translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-red-300">
+                    CONTINUE
+                </button>
+                <button class="bg-red-500 text-white font-bold text-xl rounded-xl px-12 py-3 shadow-lg border-b-4 border-red-700 transform transition-transform duration-200 hover:scale-105 active:border-b-2 active:translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-red-300">
+                    BROSELOW CHART
+                </button>
+            </footer>
+        </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- ================= MENU PAGE SECTION ================ -->
+    <!-- ================================================== -->
+    <section id="menuPage" class="hidden">
+        <div class="relative min-h-screen flex flex-col items-center justify-around p-6 overflow-hidden">
+
+            <header class="text-center w-full max-w-sm z-10">
+                <div class="bg-red-500 rounded-lg shadow-lg p-2 flex items-center justify-center space-x-3 border-4 border-dashed border-white">
+                    <img src="stethoscope-icon.png" alt="Stethoscope icon" class="h-12 w-12">
+                    <h1 class="text-4xl text-white tracking-wider font-bangers">MENU</h1>
+                    <img src="stethoscope-icon.png" alt="Stethoscope icon" class="h-12 w-12">
+                </div>
+            </header>
+
+            <main class="w-full max-w-xs z-10">
+                <div class="space-y-4">
+                    <button id="drugDoseButton" class="w-full bg-teal-500 text-black font-bold text-lg rounded-lg p-3 shadow-lg border-b-4 border-teal-700 hover:bg-teal-600 transition-all transform hover:scale-105 flex items-center justify-center space-x-3">
+                        <img src="drug-dose-icon.png" alt="Drug dose icon" class="w-6 h-6">
+                        <span>DRUG DOSE CALCULATOR</span>
+                    </button>
+                    <button id="fluidRegimenButton" class="w-full bg-teal-500 text-black font-bold text-lg rounded-lg p-3 shadow-lg border-b-4 border-teal-700 hover:bg-teal-600 transition-all transform hover:scale-105 flex items-center justify-center space-x-3">
+                        <img src="fluid-regimen-icon.png" alt="Fluid regimen icon" class="w-6 h-6">
+                        <span>FLUID REGIMEN CALCULATOR</span>
+                    </button>
+                    <button id="medicalEquipmentsButton" class="w-full bg-teal-500 text-black font-bold text-lg rounded-lg p-3 shadow-lg border-b-4 border-teal-700 hover:bg-teal-600 transition-all transform hover:scale-105 flex items-center justify-center space-x-3">
+                        <img src="medical-equipment-icon.png" alt="Medical equipment icon" class="w-6 h-6">
+                        <span>MEDICAL EQUIPMENTS</span>
+                    </button>
+                    <button id="resuscitationButton" class="w-full bg-teal-500 text-black font-bold text-lg rounded-lg p-3 shadow-lg border-b-4 border-teal-700 hover:bg-teal-600 transition-all transform hover:scale-105 flex items-center justify-center space-x-3">
+                        <img src="resuscitation-icon.png" alt="Resuscitation icon" class="w-6 h-6">
+                        <span>RESUSCITATION</span>
+                    </button>
+                </div>
+            </main>
+
+            <footer class="w-full max-w-md text-center z-10">
+                <!-- Stethoscope icon removed from here -->
+            </footer>
+        </div>
+    </section>
+    
+    <!-- ================================================== -->
+    <!-- ============= DRUG DOSE PAGE SECTION ============= -->
+    <!-- ================================================== -->
+    <section id="drugDosePage" class="hidden">
+        <div class="relative min-h-screen flex flex-col items-center justify-start p-6 space-y-8 overflow-hidden">
+            <header class="text-center w-full max-w-sm z-10">
+                <div class="bg-red-500 rounded-lg shadow-lg p-2 flex items-center justify-center space-x-3 border-4 border-dashed border-white">
+                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                    <h1 class="text-4xl text-white tracking-wider font-bangers">EZACCESS</h1>
+                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                </div>
+            </header>
+
+            <div class="bg-teal-500 text-black text-2xl font-bold rounded-lg px-10 py-4 shadow-md text-center">
+                DRUG DOSE CALCULATOR
+            </div>
+
+            <main class="w-full max-w-sm z-10">
+                <label for="drugSearch" class="text-center block mb-2 font-bold">PLEASE INSERT DRUG NAME:</label>
+                <div class="relative">
+                    <input type="text" id="drugSearch" class="w-full p-2 pr-10 rounded-lg border-2 border-gray-400" autocomplete="off">
+                    <div id="autocompleteList" class="absolute z-10 w-full bg-white border border-gray-300 rounded-b-lg hidden"></div>
+                </div>
+                <div id="drugInfo" class="mt-4 p-4 bg-white rounded-lg shadow-md hidden">
+                    <!-- Drug info will be displayed here -->
+                </div>
+            </main>
+
+            <footer class="w-full max-w-md text-center z-10">
+                <button id="drugDoseBackButton" class="bg-gray-600 text-white font-bold text-xl rounded-lg px-10 py-2 shadow-lg hover:bg-gray-700">
+                    BACK
+                </button>
+            </footer>
+        </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- ============ FLUID REGIMEN PAGE SECTION =========== -->
+    <!-- ================================================== -->
+    <section id="fluidRegimenPage" class="hidden">
+        <div class="relative min-h-screen flex flex-col items-center justify-start p-6 space-y-8 overflow-hidden">
+            <header class="text-center w-full max-w-sm z-10">
+                <div class="bg-red-500 rounded-lg shadow-lg p-2 flex items-center justify-center space-x-3 border-4 border-dashed border-white">
+                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                    <h1 class="text-4xl text-white tracking-wider font-bangers">EZACCESS</h1>
+                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                </div>
+            </header>
+
+            <div class="bg-teal-500 text-black text-2xl font-bold rounded-lg px-10 py-4 shadow-md text-center">
+                FLUID REGIMEN CALCULATOR
+            </div>
+
+            <main class="w-full max-w-sm z-10">
+                <p class="text-center font-bold mb-4">PLEASE SELECT:</p>
+                <div class="space-y-4">
+                    <button class="w-full arrow-button">TOTAL DAILY FLUID REQUIREMENT</button>
+                    <button id="hollidaySegarButton" class="w-full arrow-button">HOLLIDAY SEGAR</button>
+                    <button class="w-full arrow-button">DENGUE FLUID REGIME</button>
+                </div>
+            </main>
+
+            <footer class="w-full max-w-md text-center z-10">
+                <button id="fluidRegimenBackButton" class="bg-gray-600 text-white font-bold text-xl rounded-lg px-10 py-2 shadow-lg hover:bg-gray-700">
+                    BACK
+                </button>
+            </footer>
+        </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- ============ HOLLIDAY SEGAR PAGE SECTION ========== -->
+    <!-- ================================================== -->
+    <section id="hollidaySegarPage" class="hidden">
+        <div class="relative min-h-screen flex flex-col items-center justify-start p-6 space-y-8 overflow-hidden">
+            <header class="text-center w-full max-w-sm z-10">
+                <div class="bg-teal-500 text-black text-2xl font-bold rounded-lg px-10 py-4 shadow-md text-center">
+                    HOLLIDAY SEGAR
+                </div>
+            </header>
+
+            <main class="w-full max-w-sm z-10">
+                <p class="text-center font-bold mb-4">PLEASE SELECT:</p>
+                <div class="space-y-4">
+                    <button id="fullMaintenanceButton" class="w-full arrow-button">FULL MAINTENANCE</button>
+                    <button class="w-full arrow-button">BOLUS</button>
+                    <button class="w-full arrow-button">DEFICIT CORRECTION</button>
+                </div>
+            </main>
+
+            <footer class="w-full max-w-md text-center z-10">
+                <button id="hollidaySegarBackButton" class="bg-gray-600 text-white font-bold text-xl rounded-lg px-10 py-2 shadow-lg hover:bg-gray-700">
+                    BACK
+                </button>
+            </footer>
+        </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- ============ FLUID RESULT PAGE SECTION ============ -->
+    <!-- ================================================== -->
+    <section id="fluidResultPage" class="hidden">
+        <div class="relative min-h-screen flex flex-col items-center justify-center p-6 space-y-8 overflow-hidden">
+            <main class="w-full max-w-sm z-10 bg-white p-6 rounded-lg shadow-lg">
+                <h1 class="text-2xl font-bold text-center mb-4 font-bangers tracking-wider">FLUID REGIME</h1>
+                <div id="fluidResultDetails" class="text-left space-y-2">
+                    <!-- Fluid calculation details will be displayed here -->
+                </div>
+            </main>
+            <footer class="w-full max-w-md text-center z-10">
+                <button id="fluidResultBackButton" class="bg-gray-600 text-white font-bold text-xl rounded-lg px-10 py-2 shadow-lg hover:bg-gray-700">
+                    BACK
+                </button>
+            </footer>
+        </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- =========== MEDICAL EQUIPMENTS PAGE SECTION ======== -->
+    <!-- ================================================== -->
+    <section id="medicalEquipmentsPage" class="hidden">
+        <div class="relative min-h-screen flex flex-col items-center justify-start p-6 space-y-8 overflow-hidden">
+            <header class="text-center w-full max-w-sm z-10">
+                <div class="bg-red-500 rounded-lg shadow-lg p-2 flex items-center justify-center space-x-3 border-4 border-dashed border-white">
+                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                    <h1 class="text-4xl text-white tracking-wider font-bangers">EZACCESS</h1>
+                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                </div>
+            </header>
+
+            <div class="bg-teal-500 text-black text-2xl font-bold rounded-lg px-10 py-4 shadow-md text-center">
+                MEDICAL EQUIPMENTS
+            </div>
+
+            <main class="w-full max-w-sm z-10 bg-white p-4 rounded-lg">
+                <p class="font-bold mb-2">THE SUITABLE SIZES FOR SPECIFIC MEDICAL EQUIPMENT WILL BE DISPLAYED HERE:</p>
+                <ol class="list-decimal list-inside space-y-2">
+                    <li>LARYNGOSCOPE BLADE SIZE AND TYPE</li>
+                    <li>ENDOTRACHEAL TUBE SIZE (CUFFED/UNCUFFED)</li>
+                    <li>ANCHOR OF ETT</li>
+                    <li>NASOPHARYNGEAL TUBE SIZE</li>
+                </ol>
+            </main>
+
+            <footer class="w-full max-w-md text-center z-10">
+                <button id="medicalEquipmentsBackButton" class="bg-gray-600 text-white font-bold text-xl rounded-lg px-10 py-2 shadow-lg hover:bg-gray-700">
+                    BACK
+                </button>
+            </footer>
+        </div>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- ============== RESUSCITATION PAGE SECTION ========== -->
+    <!-- ================================================== -->
+    <section id="resuscitationPage" class="hidden">
+        <div class="relative min-h-screen flex flex-col items-center justify-start p-6 space-y-8 overflow-hidden">
+            <header class="text-center w-full max-w-sm z-10">
+                <div class="bg-red-500 rounded-lg shadow-lg p-2 flex items-center justify-center space-x-3 border-4 border-dashed border-white">
+                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                    <h1 class="text-4xl text-white tracking-wider font-bangers">EZACCESS</h1>
+                    <img src="https://placehold.co/48x48/FFDDDD/c1121f?text=Icon" alt="Medical icon" class="h-12 w-12 rounded-full">
+                </div>
+            </header>
+
+            <div class="bg-teal-500 text-black text-2xl font-bold rounded-lg px-10 py-4 shadow-md text-center">
+                RESUSCITATION
+            </div>
+
+            <main class="w-full max-w-sm z-10 bg-white p-4 rounded-lg">
+                <p class="font-bold mb-2">SPECIFIC CALCULATED DOSES FOR RESUSCITATION DRUGS WILL BE DISPLAYED HERE, INCLUDING:</p>
+                <ol class="list-decimal list-inside space-y-2">
+                    <li>PREMEDICATIONS</li>
+                    <li>INOTROPES</li>
+                    <li>ANTIEPILEPTICS</li>
+                    <li>ETC</li>
+                </ol>
+            </main>
+
+            <footer class="w-full max-w-md text-center z-10">
+                <button id="resuscitationBackButton" class="bg-gray-600 text-white font-bold text-xl rounded-lg px-10 py-2 shadow-lg hover:bg-gray-700">
+                    BACK
+                </button>
+            </footer>
+        </div>
+    </section>
+
+
     <!-- JavaScript to switch between pages -->
     <script>
+        // ==================================================
+        // ============== PAGE NAVIGATION ===================
+        // ==================================================
         const landingPage = document.getElementById('landingPage');
         const formPage = document.getElementById('formPage');
+        const resultsPage = document.getElementById('resultsPage');
+        const menuPage = document.getElementById('menuPage');
+        const drugDosePage = document.getElementById('drugDosePage');
+        const fluidRegimenPage = document.getElementById('fluidRegimenPage');
+        const hollidaySegarPage = document.getElementById('hollidaySegarPage');
+        const fluidResultPage = document.getElementById('fluidResultPage');
+        const medicalEquipmentsPage = document.getElementById('medicalEquipmentsPage');
+        const resuscitationPage = document.getElementById('resuscitationPage');
+
+        // Buttons
         const startButton = document.getElementById('startButton');
+        const devModeButton = document.getElementById('devModeButton');
+        const formStartButton = document.getElementById('formStartButton');
+        const continueButton = document.getElementById('continueButton');
+        const drugDoseButton = document.getElementById('drugDoseButton');
+        const drugDoseBackButton = document.getElementById('drugDoseBackButton');
+        const fluidRegimenButton = document.getElementById('fluidRegimenButton');
+        const fluidRegimenBackButton = document.getElementById('fluidRegimenBackButton');
+        const hollidaySegarButton = document.getElementById('hollidaySegarButton');
+        const hollidaySegarBackButton = document.getElementById('hollidaySegarBackButton');
+        const fullMaintenanceButton = document.getElementById('fullMaintenanceButton');
+        const fluidResultBackButton = document.getElementById('fluidResultBackButton');
+        const medicalEquipmentsButton = document.getElementById('medicalEquipmentsButton');
+        const medicalEquipmentsBackButton = document.getElementById('medicalEquipmentsBackButton');
+        const resuscitationButton = document.getElementById('resuscitationButton');
+        const resuscitationBackButton = document.getElementById('resuscitationBackButton');
+        
         const body = document.body;
 
         startButton.addEventListener('click', () => {
-            // Hide landing page
             landingPage.classList.add('hidden');
-            
-            // Show form page
             formPage.classList.remove('hidden');
-
-            // Change background
             body.classList.remove('landing-bg');
-            body.classList.add('form-bg');
+            body.classList.add('app-bg');
         });
+
+        devModeButton.addEventListener('click', () => {
+            // Set default patient data for dev mode
+            patientWeight = 70; // example weight
+            landingPage.classList.add('hidden');
+            menuPage.classList.remove('hidden');
+            body.classList.remove('landing-bg');
+            body.classList.add('app-bg');
+        });
+
+        formStartButton.addEventListener('click', () => {
+            calculateAndShowResults();
+        });
+
+        continueButton.addEventListener('click', () => {
+            resultsPage.classList.add('hidden');
+            menuPage.classList.remove('hidden');
+        });
+
+        drugDoseButton.addEventListener('click', () => {
+            menuPage.classList.add('hidden');
+            drugDosePage.classList.remove('hidden');
+            body.classList.remove('app-bg');
+            body.classList.add('landing-bg');
+        });
+
+        drugDoseBackButton.addEventListener('click', () => {
+            drugDosePage.classList.add('hidden');
+            menuPage.classList.remove('hidden');
+            body.classList.remove('landing-bg');
+            body.classList.add('app-bg');
+        });
+
+        fluidRegimenButton.addEventListener('click', () => {
+            menuPage.classList.add('hidden');
+            fluidRegimenPage.classList.remove('hidden');
+            body.classList.remove('app-bg');
+            body.classList.add('landing-bg');
+        });
+
+        fluidRegimenBackButton.addEventListener('click', () => {
+            fluidRegimenPage.classList.add('hidden');
+            menuPage.classList.remove('hidden');
+            body.classList.remove('landing-bg');
+            body.classList.add('app-bg');
+        });
+
+        hollidaySegarButton.addEventListener('click', () => {
+            fluidRegimenPage.classList.add('hidden');
+            hollidaySegarPage.classList.remove('hidden');
+        });
+
+        hollidaySegarBackButton.addEventListener('click', () => {
+            hollidaySegarPage.classList.add('hidden');
+            fluidRegimenPage.classList.remove('hidden');
+        });
+
+        fullMaintenanceButton.addEventListener('click', () => {
+            calculateAndShowFluids();
+            hollidaySegarPage.classList.add('hidden');
+            fluidResultPage.classList.remove('hidden');
+        });
+
+        fluidResultBackButton.addEventListener('click', () => {
+            fluidResultPage.classList.add('hidden');
+            hollidaySegarPage.classList.remove('hidden');
+        });
+
+        medicalEquipmentsButton.addEventListener('click', () => {
+            menuPage.classList.add('hidden');
+            medicalEquipmentsPage.classList.remove('hidden');
+            body.classList.remove('app-bg');
+            body.classList.add('landing-bg');
+        });
+
+        medicalEquipmentsBackButton.addEventListener('click', () => {
+            medicalEquipmentsPage.classList.add('hidden');
+            menuPage.classList.remove('hidden');
+            body.classList.remove('landing-bg');
+            body.classList.add('app-bg');
+        });
+
+        resuscitationButton.addEventListener('click', () => {
+            menuPage.classList.add('hidden');
+            resuscitationPage.classList.remove('hidden');
+            body.classList.remove('app-bg');
+            body.classList.add('landing-bg');
+        });
+
+        resuscitationBackButton.addEventListener('click', () => {
+            resuscitationPage.classList.add('hidden');
+            menuPage.classList.remove('hidden');
+            body.classList.remove('landing-bg');
+            body.classList.add('app-bg');
+        });
+
+        // ==================================================
+        // =========== PATIENT DATA & CALCULATIONS ==========
+        // ==================================================
+        let patientWeight = 0; // To store patient weight globally
+        const weightInput = document.getElementById('weight');
+        const heightInput = document.getElementById('height');
+        const genderInput = document.getElementById('gender');
+        const bmiOutput = document.getElementById('bmiOutput');
+        const adjBwOutput = document.getElementById('adjBwOutput');
+        const idealBwOutput = document.getElementById('idealBwOutput');
+        const fluidResultDetails = document.getElementById('fluidResultDetails');
+
+        function calculateAndShowResults() {
+            const weightKg = parseFloat(weightInput.value);
+            const heightCm = parseFloat(heightInput.value);
+            const gender = genderInput.value;
+
+            if (!weightKg || !heightCm || weightKg <= 0 || heightCm <= 0) {
+                console.error("Please enter valid weight and height.");
+                return; 
+            }
+            
+            patientWeight = weightKg; // Store weight for later use
+
+            const heightM = heightCm / 100;
+            const bmi = weightKg / (heightM * heightM);
+
+            const heightIn = heightCm / 2.54;
+            let idealBw = 0;
+            const inchesOver5Feet = heightIn > 60 ? heightIn - 60 : 0;
+
+            if (gender === 'Male') {
+                idealBw = 50 + (2.3 * inchesOver5Feet);
+            } else {
+                idealBw = 45.5 + (2.3 * inchesOver5Feet);
+            }
+
+            const adjBw = idealBw + 0.4 * (weightKg - idealBw);
+
+            bmiOutput.innerText = bmi.toFixed(1);
+            adjBwOutput.innerText = `${adjBw.toFixed(1)} kg`;
+            idealBwOutput.innerText = `${idealBw.toFixed(1)} kg`;
+
+            formPage.classList.add('hidden');
+            resultsPage.classList.remove('hidden');
+        }
+
+        function calculateAndShowFluids() {
+            if (patientWeight <= 0) {
+                fluidResultDetails.innerHTML = "<p>Patient weight not set. Please go back and enter patient details.</p>";
+                return;
+            }
+
+            let dailyFluid = 0;
+            if (patientWeight <= 10) {
+                dailyFluid = patientWeight * 100;
+            } else if (patientWeight <= 20) {
+                dailyFluid = 1000 + ((patientWeight - 10) * 50);
+            } else {
+                dailyFluid = 1500 + ((patientWeight - 20) * 20);
+            }
+
+            const hourlyRate = dailyFluid / 24;
+
+            fluidResultDetails.innerHTML = `
+                <p><strong>Patient Weight:</strong> ${patientWeight.toFixed(1)} kg</p>
+                <p><strong>Type of Fluid:</strong> Isotonic crystalloid (e.g., Normal Saline, Lactated Ringer's) is typically used.</p>
+                <p><strong>Total Daily Fluid:</strong> ${dailyFluid.toFixed(0)} ml/day</p>
+                <p><strong>Specific Rate:</strong> ${hourlyRate.toFixed(1)} ml/hr</p>
+                <p><strong>Duration of Infusion:</strong> Continuous maintenance.</p>
+            `;
+        }
+
+        // ==================================================
+        // ============ DRUG SEARCH FUNCTIONALITY ===========
+        // ==================================================
+        const drugSearchInput = document.getElementById('drugSearch');
+        const autocompleteList = document.getElementById('autocompleteList');
+        const drugInfo = document.getElementById('drugInfo');
+
+        const drugDatabase = [
+            { name: 'Paracetamol', details: '<b>Dose:</b> 10-15 mg/kg per dose.<br><b>Indications:</b> Pain, fever.<br><b>Contraindications:</b> Severe liver disease.' },
+            { name: 'Ibuprofen', details: '<b>Dose:</b> 5-10 mg/kg per dose.<br><b>Indications:</b> Pain, fever, inflammation.<br><b>Contraindications:</b> Aspirin allergy, active peptic ulcer.' },
+            { name: 'Amoxicillin', details: '<b>Dose:</b> 25-50 mg/kg/day in divided doses.<br><b>Indications:</b> Bacterial infections.<br><b>Contraindications:</b> Penicillin allergy.' },
+            { name: 'Adrenaline', details: '<b>Dose:</b> 0.01 mg/kg.<br><b>Indications:</b> Anaphylaxis, cardiac arrest.<br><b>Contraindications:</b> None in a life-threatening situation.' },
+            { name: 'Amiodarone', details: '<b>Dose:</b> 5 mg/kg IV over 20-60 minutes.<br><b>Indications:</b> Ventricular arrhythmias.<br><b>Contraindications:</b> Severe sinus node dysfunction.' },
+            { name: 'Aspirin', details: '<b>Dose:</b> 160-325 mg chewed for ACS.<br><b>Indications:</b> Acute Coronary Syndrome.<br><b>Contraindications:</b> Allergy, active bleeding.' },
+            { name: 'Atropine', details: '<b>Dose:</b> 0.5 mg IV/IO every 3-5 mins for bradycardia.<br><b>Indications:</b> Symptomatic bradycardia.<br><b>Contraindications:</b> Tachycardia, glaucoma.' },
+            { name: 'Calcium Gluconate', details: '<b>Dose:</b> 1-2 g IV over 5-10 mins.<br><b>Indications:</b> Hyperkalemia, calcium channel blocker overdose.<br><b>Contraindications:</b> Hypercalcemia, digitalis toxicity.' },
+            { name: 'Dexamethasone', details: '<b>Dose:</b> 0.6 mg/kg for croup.<br><b>Indications:</b> Croup, asthma exacerbation.<br><b>Contraindications:</b> Systemic fungal infections.' },
+            { name: 'Dextrose 50%', details: '<b>Dose:</b> 25 g (50 mL) IV.<br><b>Indications:</b> Hypoglycemia.<br><b>Contraindications:</b> Intracranial hemorrhage.' },
+            { name: 'Diazepam', details: '<b>Dose:</b> 5-10 mg IV for seizures.<br><b>Indications:</b> Seizures, anxiety, sedation.<br><b>Contraindications:</b> Severe respiratory depression.' },
+            { name: 'Dopamine', details: '<b>Dose:</b> 2-20 mcg/kg/min infusion.<br><b>Indications:</b> Hypotension, shock.<br><b>Contraindications:</b> Pheochromocytoma, V-Fib.' },
+            { name: 'Fentanyl', details: '<b>Dose:</b> 1-2 mcg/kg IV/IM.<br><b>Indications:</b> Severe pain.<br><b>Contraindications:</b> Respiratory depression, allergy.' },
+            { name: 'Furosemide', details: '<b>Dose:</b> 20-40 mg IV.<br><b>Indications:</b> Pulmonary edema, heart failure.<br><b>Contraindications:</b> Anuria, hypotension.' },
+            { name: 'Ketamine', details: '<b>Dose:</b> 1-2 mg/kg IV for induction.<br><b>Indications:</b> Sedation, analgesia, induction.<br><b>Contraindications:</b> Severe hypertension, psychosis.' },
+            { name: 'Lidocaine', details: '<b>Dose:</b> 1-1.5 mg/kg IV/IO for cardiac arrest.<br><b>Indications:</b> Ventricular tachycardia/fibrillation.<br><b>Contraindications:</b> Adams-Stokes syndrome, severe heart block.' },
+            { name: 'Lorazepam', details: '<b>Dose:</b> 2-4 mg IV for seizures.<br><b>Indications:</b> Seizures, anxiety.<br><b>Contraindications:</b> Allergy, acute narrow-angle glaucoma.' },
+            { name: 'Magnesium Sulfate', details: '<b>Dose:</b> 1-2 g IV for Torsades de Pointes.<br><b>Indications:</b> Torsades de Pointes, eclampsia, severe asthma.<br><b>Contraindications:</b> Heart block, renal failure.' },
+            { name: 'Midazolam', details: '<b>Dose:</b> 2.5-5 mg IV for sedation.<br><b>Indications:</b> Sedation, seizures.<br><b>Contraindications:</b> Acute narrow-angle glaucoma, shock.' },
+            { name: 'Morphine', details: '<b>Dose:</b> 2-4 mg IV every 5-15 mins.<br><b>Indications:</b> Severe pain.<br><b>Contraindications:</b> Respiratory depression, hypotension.' },
+            { name: 'Naloxone', details: '<b>Dose:</b> 0.4-2 mg IV/IM/IN.<br><b>Indications:</b> Opioid overdose.<br><b>Contraindications:</b> Known hypersensitivity.' },
+            { name: 'Nitroglycerin', details: '<b>Dose:</b> 0.4 mg sublingual every 5 mins.<br><b>Indications:</b> Angina, ACS.<br><b>Contraindications:</b> Hypotension, recent PDE-5 inhibitor use.' },
+            { name: 'Propofol', details: '<b>Dose:</b> 1.5-2.5 mg/kg IV for induction.<br><b>Indications:</b> Anesthesia induction/maintenance, sedation.<br><b>Contraindications:</b> Egg/soy allergy, hypotension.' },
+            { name: 'Rocuronium', details: '<b>Dose:</b> 0.6-1.2 mg/kg IV for RSI.<br><b>Indications:</b> Paralysis for RSI.<br><b>Contraindications:</b> Allergy.' },
+            { name: 'Sodium Bicarbonate', details: '<b>Dose:</b> 1 mEq/kg IV.<br><b>Indications:</b> Metabolic acidosis, certain overdoses.<br><b>Contraindications:</b> Metabolic alkalosis, hypernatremia.' },
+            { name: 'Succinylcholine', details: '<b>Dose:</b> 1-1.5 mg/kg IV for RSI.<br><b>Indications:</b> Paralysis for RSI.<br><b>Contraindications:</b> Hyperkalemia, malignant hyperthermia.' }
+        ];
+
+        drugSearchInput.addEventListener('input', () => {
+            const query = drugSearchInput.value.toLowerCase();
+            autocompleteList.innerHTML = '';
+            
+            if (query.length === 0) {
+                autocompleteList.classList.add('hidden');
+                return;
+            }
+
+            const filteredDrugs = drugDatabase.filter(drug => drug.name.toLowerCase().startsWith(query));
+
+            if (filteredDrugs.length > 0) {
+                autocompleteList.classList.remove('hidden');
+                filteredDrugs.forEach(drug => {
+                    const item = document.createElement('div');
+                    item.classList.add('p-2', 'hover:bg-gray-200', 'cursor-pointer');
+                    item.innerText = drug.name;
+                    item.addEventListener('click', () => {
+                        drugSearchInput.value = drug.name;
+                        autocompleteList.classList.add('hidden');
+                        showDrugDetails(drug);
+                    });
+                    autocompleteList.appendChild(item);
+                });
+            } else {
+                autocompleteList.classList.add('hidden');
+            }
+        });
+
+        function showDrugDetails(drug) {
+            drugInfo.innerHTML = `
+                <h3 class="text-xl font-bold mb-2">${drug.name.toUpperCase()}</h3>
+                <p>${drug.details}</p>
+            `;
+            drugInfo.classList.remove('hidden');
+        }
+
     </script>
 
 </body>
